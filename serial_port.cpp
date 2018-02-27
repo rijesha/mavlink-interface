@@ -192,6 +192,9 @@ int
 Serial_Port::
 write_message(const mavlink_message_t &message)
 {
+	if (message.len < 1){
+		return 0;
+	}
 	char buf[300];
 
 	// Translate message to buffer

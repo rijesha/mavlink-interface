@@ -10,6 +10,14 @@ Multithreaded_Interface::Multithreaded_Interface(){
 
 }
 
+bool Multithreaded_Interface::add_periodic_message(Periodic_Message * pm){
+    if (running == false)
+        return false;
+    pm_container.push_back(pm);
+    pm->start_message();
+    return true;
+}
+
 void Multithreaded_Interface::start(const char* port, int baud){
     serial_port.uart_name = port;
 	serial_port.baudrate = baud;
@@ -17,7 +25,7 @@ void Multithreaded_Interface::start(const char* port, int baud){
     running = true;
     
     start_writer_thread();
-    //start_reader_thread();
+    start_reader_thread();
 }
 
 void Multithreaded_Interface::write_message(mavlink_message_t msg){
@@ -28,19 +36,12 @@ void Multithreaded_Interface::start_writer_thread(){
     running = true;
     write_th = thread([=]() {
         while (running){
-            mavlink_message_t msg;
-            msg = msg_queue.pop();
-            //mavlink_att_pos_mocap_t att_pos_mocap;
-            //mavlink_msg_att_pos_mocap_decode(&msg, &att_pos_mocap);
-            //cout << "sending with x of " << att_pos_mocap.x << endl;
-            serial_port.write_message(msg);
-        }   
+            serial_port.write_message(msg_queue.pop(200));
+        }
     });
 }
 
 void Multithreaded_Interface::start_reader_thread(){
-    running = true;
-
     read_th = thread([=]() {
         reader_thread();
     });
@@ -48,17 +49,21 @@ void Multithreaded_Interface::start_reader_thread(){
 
 void Multithreaded_Interface::shutdown(){
     running = false;
-    read_th.join();
-    write_th.join();
+    cout << "SHUTTING DOWN" << endl;
+    if (read_th.joinable())
+        read_th.join();
+    if (write_th.joinable())
+        write_th.join();
+    while (!pm_container.empty()){
+        pm_container.back()->stop_message();
+        pm_container.pop_back();
+    }
     serial_port.stop();
 }
 
 void Multithreaded_Interface::reader_thread(){
-    
     bool success;
-    bool time_to_exit = false;
-
-	while ( !time_to_exit )
+	while ( running )
 	{
 		mavlink_message_t message;
 		success = serial_port.read_message(message);
@@ -73,6 +78,7 @@ void Multithreaded_Interface::reader_thread(){
 Periodic_Message::Periodic_Message(Multithreaded_Interface * mti, mavlink_message_t msg, float frequency):mti(mti), msg(msg) {
     interval = (1.0/frequency) * 1000.0; // in miliseconds 
 }
+
 void Periodic_Message::update_message(mavlink_message_t msg1){
     mtx.lock();
     msg = msg1;
@@ -83,12 +89,12 @@ void Periodic_Message::start_message(){
     running = true;
     th = thread([=]() {
         chrono::milliseconds i(interval);
-        while (running && mti->running){
+        while (running){
             this_thread::sleep_for(i);
             mtx.lock();
             mti->write_message(msg);
             mtx.unlock();
-        }   
+        }
     });
 }
 

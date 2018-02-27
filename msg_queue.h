@@ -9,8 +9,10 @@
 #include <cmath>
 #include <mutex>              
 #include <condition_variable> 
+#include <chrono>
 
 using namespace std;
+using namespace std::literals::chrono_literals;
 
 template <class T>
 class MessageQueue
@@ -39,11 +41,16 @@ T MessageQueue<T>::pop(int timeout) {
     if (elements.empty()){
         queueLockMtx.unlock();
         std::unique_lock<std::mutex> lk(emptyQueueMtx);
-        newDataInQueue.wait(lk);
+        if (timeout == 0){
+            newDataInQueue.wait(lk);
+        }else {
+            if (newDataInQueue.wait_for(lk, timeout*1ms) == cv_status::timeout){
+                return T();
+            }
+        }
         queueLockMtx.lock();
     }
 
-    
     T e = elements.front();
     elements.pop();
     queueLockMtx.unlock();

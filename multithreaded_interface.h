@@ -15,6 +15,8 @@
 using namespace std;
 
 long int get_curent_time();
+class Periodic_Message;
+class Multithreaded_Interface;
 
 class Mavlink_Message
 {
@@ -51,7 +53,10 @@ public:
     void start_writer_thread();
     
     void reader_thread();
+    bool add_periodic_message(Periodic_Message * pm);
     bool running = false;
+
+    vector<Periodic_Message *> pm_container;
 
     //int sysid = 0;
     //int compid = 0;

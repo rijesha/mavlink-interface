@@ -43,8 +43,8 @@ int main(){
     Periodic_Message att_per_msg(&mti, att_pos_message,10);
     Periodic_Message set_target_per_msg(&mti, set_target_message, 15);
 
-    att_per_msg.start_message();
-    set_target_per_msg.start_message();
+    mti.add_periodic_message(&att_per_msg);
+    mti.add_periodic_message(&set_target_per_msg);
 
 	cp.x = 17;
 	cp.y = 435;
@@ -78,10 +78,9 @@ int main(){
     }
 
     toggle_offboard_control(&mti, false);
-    chrono::milliseconds j(1000);
-    this_thread::sleep_for(j);
 
     mti.shutdown();
+    return 0;
 }
 
 #endif

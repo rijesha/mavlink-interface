@@ -16,7 +16,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) -pthread $(OBJECTS) -o $@ $(LIBS)
 
 .cpp.o:
-	$(CC) $(CFLAGS) -std=c++11 $(INCLUDES) $< -o $@
+	$(CC) $(CFLAGS) -std=c++14 $(INCLUDES) $< -o $@
 
 clean:
 	@echo $OBJECTS = $(OBJECTS)
