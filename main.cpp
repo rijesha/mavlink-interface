@@ -3,9 +3,14 @@
 #include <stdio.h>   // Standard input/output definitions
 #include "position_controller.h"
 
+#define PORT "/dev/ttyUSB1"
+#define BAUD 921600
 
 int main(){
-    Position_Controller p("/dev/ttyUSB1", 921600);
+    Multithreaded_Interface mti;
+    mti.start(PORT, BAUD);
+
+    Position_Controller p(&mti);
 
     chrono::milliseconds k(10000);
     this_thread::sleep_for(k);

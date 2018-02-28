@@ -5,15 +5,13 @@
 #include <common/mavlink.h>
 
 #define MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION     0b0000110111111000
-#define PORT "/dev/ttyUSB1"
-#define BAUD 921600
 
 
 class Position_Controller
 {
 public:
-    Position_Controller(const char* port = PORT, int baud = BAUD);
-    Multithreaded_Interface mti;
+    Position_Controller(Multithreaded_Interface * mti);
+    Multithreaded_Interface * mti;
     mavlink_att_pos_mocap_t current_position;
     mavlink_set_position_target_local_ned_t desired_position;
 

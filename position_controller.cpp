@@ -6,17 +6,17 @@ int system_id = 1;
 int autopilot_id = 1;
 int companion_id = 0;
 
-Position_Controller::Position_Controller(const char* port, int baud){
-    mti.start(port, baud);
+Position_Controller::Position_Controller(Multithreaded_Interface * mti){
+	this->mti = mti;
 
     desired_position.type_mask = MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION;
 	desired_position.coordinate_frame = MAV_FRAME_LOCAL_NED;
     
-    current_position_periodic = new Periodic_Message(&mti, current_position_message, 10);
-    desired_position_periodic = new Periodic_Message(&mti, desired_position_message, 15);
+    current_position_periodic = new Periodic_Message(mti, current_position_message, 10);
+    desired_position_periodic = new Periodic_Message(mti, desired_position_message, 15);
 
-    mti.add_periodic_message(current_position_periodic);
-    mti.add_periodic_message(desired_position_periodic);
+    mti->add_periodic_message(current_position_periodic);
+    mti->add_periodic_message(desired_position_periodic);
     update_current_position(0, 0, 0, 0);
     update_desired_position(0, 0, 0, 0);
 }
@@ -58,10 +58,10 @@ void Position_Controller::toggle_offboard_control(bool flag )
 	mavlink_msg_command_long_encode(system_id, companion_id, &message, &com);
 
 	// Send the message
-	mti.write_message(message);
+	mti->write_message(message);
 }
 
 void Position_Controller::shutdown() {
-	mti.shutdown();
+	mti->shutdown();
 }
 
