@@ -75,6 +75,8 @@ void Multithreaded_Interface::reader_thread(){
 	}
 }
 
+Periodic_Message::Periodic_Message(){}
+
 Periodic_Message::Periodic_Message(Multithreaded_Interface * mti, mavlink_message_t msg, float frequency):mti(mti), msg(msg) {
     interval = (1.0/frequency) * 1000.0; // in miliseconds 
 }
@@ -82,6 +84,14 @@ Periodic_Message::Periodic_Message(Multithreaded_Interface * mti, mavlink_messag
 void Periodic_Message::update_message(mavlink_message_t msg1){
     mtx.lock();
     msg = msg1;
+    mtx.unlock();
+}
+
+void Periodic_Message::pause(){
+    mtx.lock();
+}
+
+void Periodic_Message::resume(){
     mtx.unlock();
 }
 
@@ -94,6 +104,7 @@ void Periodic_Message::start_message(){
             mtx.lock();
             mti->write_message(msg);
             mtx.unlock();
+            
         }
     });
 }

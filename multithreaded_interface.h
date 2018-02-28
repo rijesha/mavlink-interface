@@ -66,11 +66,15 @@ class Periodic_Message
 {
 
 public:
+    Periodic_Message();
 	Periodic_Message(Multithreaded_Interface* mti, mavlink_message_t msg, float frequency);
     void start_message();
     void stop_message();
     void change_frequency(int frequency);
     void update_message(mavlink_message_t msg);
+
+    void pause();
+    void resume();
 
     int interval;
 

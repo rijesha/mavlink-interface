@@ -6,7 +6,7 @@ INC_DIR = mavlink_c_library_v1
 CPPSOURCES += $(wildcard *.cpp)
 
 OBJECTS = $(CPPSOURCES:.cpp=.o)
-EXECUTABLE = mti
+EXECUTABLE = position_controller
 CFLAGS = -c -Wall -g -I $(INC_DIR) -g -DSTANDALONE
 LIBS =
 
