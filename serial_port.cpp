@@ -145,7 +145,7 @@ read_message(mavlink_message_t &message)
 	// Couldn't read from port
 	else
 	{
-		fprintf(stderr, "ERROR: Could not read from fd %d\n", fd);
+		//fprintf(stderr, "ERROR: Could not read from fd %d\n", fd);
 	}
 
 	// --------------------------------------------------------------------------
@@ -413,7 +413,7 @@ _setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_c
 
 	// One input byte is enough to return from read()
 	// Inter-character timer off
-	config.c_cc[VMIN]  = 1;
+	config.c_cc[VMIN]  = 0;
 	config.c_cc[VTIME] = 10; // was 0
 
 	// Get the current options for the port

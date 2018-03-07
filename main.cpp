@@ -3,7 +3,7 @@
 #include <stdio.h>   // Standard input/output definitions
 #include "position_controller.h"
 
-#define PORT "/dev/ttyUSB1"
+#define PORT "/dev/ttyUSB0"
 #define BAUD 921600
 
 int main(){

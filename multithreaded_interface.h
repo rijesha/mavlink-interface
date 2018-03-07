@@ -9,9 +9,6 @@
 #include <chrono>
 #include <ctime>
 
-#define PORT "/dev/ttyUSB0"
-#define BAUD 921600
-
 using namespace std;
 
 long int get_curent_time();
@@ -37,7 +34,7 @@ public:
 
 	Multithreaded_Interface();
     
-    void start(const char* port = PORT, int baud = BAUD);
+    void start(const char* port, int baud);
     void shutdown();
 
     Serial_Port serial_port;
