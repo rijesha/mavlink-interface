@@ -38,7 +38,7 @@ public:
     void shutdown();
 
     Serial_Port serial_port;
-    map<int,Mavlink_Message> my_map;
+    map<int,mavlink_message_t> last_messages;
     MessageQueue<mavlink_message_t> msg_queue;
 
     thread write_th;
@@ -54,6 +54,10 @@ public:
     bool running = false;
 
     vector<Periodic_Message *> pm_container;
+    void bind_new_msg_callback(std::function<void(mavlink_message_t)>);
+    
+    std::function<void(mavlink_message_t)> _cb;
+    bool callback_registered = false;
 
     //int sysid = 0;
     //int compid = 0;

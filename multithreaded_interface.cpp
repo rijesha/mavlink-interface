@@ -70,9 +70,18 @@ void Multithreaded_Interface::reader_thread(){
 
 		if( success )
 		{
-            my_map[message.msgid].update(message);
+            last_messages[message.msgid] = message;
+            if (callback_registered){
+                _cb(message);
+            }
 		}
 	}
+}
+
+void Multithreaded_Interface::bind_new_msg_callback(std::function<void(mavlink_message_t)> cb)
+{
+    _cb = cb;
+    callback_registered = true;
 }
 
 Periodic_Message::Periodic_Message(){}
