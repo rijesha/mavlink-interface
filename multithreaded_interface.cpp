@@ -87,7 +87,8 @@ void Multithreaded_Interface::bind_new_msg_callback(std::function<void(mavlink_m
 Periodic_Message::Periodic_Message(){}
 
 Periodic_Message::Periodic_Message(Multithreaded_Interface * mti, mavlink_message_t msg, float frequency):mti(mti), msg(msg) {
-    interval = (1.0/frequency) * 1000.0; // in miliseconds 
+    interval = (1.0/frequency) * 1000.0; // in miliseconds
+    mti->add_periodic_message(this);
 }
 
 void Periodic_Message::update_message(mavlink_message_t msg1){

@@ -110,11 +110,6 @@ int frequency = 10; // frequency in Hertz
 Periodic_Message current_position_periodic(*mti, current_position_message, frequency);
 ```
 
-Adding Periodic Message to mti
-```
-mti.add_periodic_message(current_position_periodic);
-```
-
 Updating the message
 ```
 current_position_periodic.update_message(current_position_message);

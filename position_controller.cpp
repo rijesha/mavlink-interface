@@ -15,8 +15,6 @@ Position_Controller::Position_Controller(Multithreaded_Interface * mti){
     current_position_periodic = new Periodic_Message(mti, current_position_message, 10);
     desired_position_periodic = new Periodic_Message(mti, desired_position_message, 15);
 
-    mti->add_periodic_message(current_position_periodic);
-    mti->add_periodic_message(desired_position_periodic);
     update_current_position(0, 0, 0, 0);
     update_desired_position(0, 0, 0, 0);
 }
