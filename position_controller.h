@@ -2,7 +2,7 @@
 #define POSITION_CONTROLLER_H
 
 #include "multithreaded_interface.h"
-#include <common/mavlink.h>
+#include <mavlink.h>
 
 #define MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION     0b0000110111111000
 

@@ -2,7 +2,7 @@
 CC = g++
 
 # Names and flags
-INC_DIR = mavlink_c_library_v1
+INC_DIR = mavlink_c_library_v1/common
 CPPSOURCES += $(wildcard *.cpp)
 
 OBJECTS = $(CPPSOURCES:.cpp=.o)
