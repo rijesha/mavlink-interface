@@ -3,8 +3,8 @@
 #include <stdio.h>   // Standard input/output definitions
 #include "position_controller.h"
 
-#define PORT "/dev/ttyUSB0"
-#define BAUD 921600
+#define PORT "/dev/ttyS1"
+#define BAUD 57600
 
 void new_msg_callback(mavlink_message_t message) {
     if (message.msgid == 0){
