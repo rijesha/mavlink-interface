@@ -42,6 +42,7 @@ void Position_Controller::update_desired_position(float x, float y, float z, flo
 	desired_position.x = x;
 	desired_position.y = y;
 	desired_position.z = z;
+	desired_position.yaw = yaw;
 
 	mavlink_msg_set_position_target_local_ned_encode(system_id, companion_id, &desired_position_message, &desired_position);
 	desired_position_periodic->update_message(desired_position_message);

@@ -4,7 +4,7 @@
 #include "multithreaded_interface.h"
 #include <mavlink.h>
 
-#define MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION 0b0000110111111000
+#define MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION 0b0000101111111000
 
 class Position_Controller
 {
