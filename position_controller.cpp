@@ -14,7 +14,7 @@ Position_Controller::Position_Controller(Multithreaded_Interface *mti)
 	desired_position.coordinate_frame = MAV_FRAME_LOCAL_NED;
 
 	current_position_periodic = new Periodic_Message(mti, current_position_message, 10);
-	desired_position_periodic = new Periodic_Message(mti, desired_position_message, 15);
+	desired_position_periodic = new Periodic_Message(mti, desired_position_message, 10);
 
 	update_current_position(0, 0, 0, 0);
 	update_desired_position(0, 0, 0, 0);
@@ -25,15 +25,17 @@ void Position_Controller::update_current_position(float x, float y, float z, flo
 	current_position.x = x;
 	current_position.y = y;
 	current_position.z = z;
+	current_position.yaw = yaw;
 
-	toQuaternion(0, 0, yaw, &current_position.q[0], &current_position.q[1], &current_position.q[2], &current_position.q[3]);
-	cout << current_position.q[0] << " " << current_position.q[1]<< " " << current_position.q[2]<< " " << current_position.q[3] << endl;
+	//toQuaternion(0, 0, yaw, &current_position.q[0], &current_position.q[1], &current_position.q[2], &current_position.q[3]);
+	//cout << current_position.q[0] << " " << current_position.q[1]<< " " << current_position.q[2]<< " " << current_position.q[3] << endl;
 	//current_position.q[0] = 1;
 	//current_position.q[1] = 0;
 	//current_position.q[2] = 0;
 	//current_position.q[3] = 0;
 
-	mavlink_msg_att_pos_mocap_encode(system_id, companion_id, &current_position_message, &current_position);
+	mavlink_msg_vision_position_estimate_encode(system_id, companion_id, &current_position_message, &current_position);
+	//mavlink_msg_att_pos_mocap_encode(system_id, companion_id, &current_position_message, &current_position);
 	current_position_periodic->update_message(current_position_message);
 }
 
@@ -43,6 +45,8 @@ void Position_Controller::update_desired_position(float x, float y, float z, flo
 	desired_position.y = y;
 	desired_position.z = z;
 	desired_position.yaw = yaw;
+	desired_position.target_system = 1;
+	desired_position.target_component = 0;
 
 	mavlink_msg_set_position_target_local_ned_encode(system_id, companion_id, &desired_position_message, &desired_position);
 	desired_position_periodic->update_message(desired_position_message);

@@ -11,7 +11,9 @@ class Position_Controller
   public:
     Position_Controller(Multithreaded_Interface *mti);
     Multithreaded_Interface *mti;
-    mavlink_att_pos_mocap_t current_position;
+    
+    //mavlink_att_pos_mocap_t current_position;
+    mavlink_vision_position_estimate_t current_position;
     mavlink_set_position_target_local_ned_t desired_position;
 
     mavlink_message_t current_position_message;
