@@ -64,35 +64,20 @@
 
 #include <mavlink.h>
 
-
 // ------------------------------------------------------------------------------
 //   Defines
 // ------------------------------------------------------------------------------
 
-// The following two non-standard baudrates should have been defined by the system
-// If not, just fallback to number
-#ifndef B460800
-#define B460800 460800
-#endif
-
-#ifndef B921600
-#define B921600 921600
-#endif
-
-
 // Status flags
-#define SERIAL_PORT_OPEN   1;
+#define SERIAL_PORT_OPEN 1;
 #define SERIAL_PORT_CLOSED 0;
 #define SERIAL_PORT_ERROR -1;
-
 
 // ------------------------------------------------------------------------------
 //   Prototypes
 // ------------------------------------------------------------------------------
 
 //class Serial_Port;
-
-
 
 // ----------------------------------------------------------------------------------
 //   Serial Port Manager Class
@@ -109,17 +94,15 @@
 class Serial_Port
 {
 
-public:
-
+  public:
 	Serial_Port();
 	Serial_Port(const char *uart_name_, int baudrate_);
 	void initialize_defaults();
-	~Serial_Port();
 
 	bool debug;
 	const char *uart_name;
-	int  baudrate;
-	int  status;
+	int baudrate;
+	int status;
 
 	int read_message(mavlink_message_t &message);
 	int write_message(const mavlink_message_t &message);
@@ -130,24 +113,16 @@ public:
 	void start();
 	void stop();
 
-	void handle_quit( int sig );
-	int  _read_port(uint8_t &cp);
+	void handle_quit(int sig);
+	int _read_port(uint8_t &cp);
 	int _write_port(char *buf, unsigned len);
 
-private:
-
-	int  fd;
+  private:
+	int fd;
 	mavlink_status_t lastStatus;
-	pthread_mutex_t  lock;
 
-	int  _open_port(const char* port);
+	int _open_port(const char *port);
 	bool _setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_control);
-	
-
 };
 
-
-
 #endif // SERIAL_PORT_H_
-
-
