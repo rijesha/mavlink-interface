@@ -18,7 +18,6 @@ public:
   mavlink_message_t current_position_message;
   mavlink_message_t desired_position_message;
 
-  Periodic_Message *current_position_periodic;
   Periodic_Message *desired_position_periodic;
 
   void update_current_position(float x, float y, float z, float yaw);

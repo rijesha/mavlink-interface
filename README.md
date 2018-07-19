@@ -3,7 +3,7 @@ The purpose of this repository is to provide a better interface than the c_uart_
 This interface allows for multithreaded message writing to the interface. 
 
 Also included is a position controller class. 
-This is a really simple class that can be used to send both `att_pos_mocap` and `set_position_target_local_ned` messages to fully control the desired and current position of the UAV.
+This is a really simple class that can be used to send both `vision_position_estimate` and `set_position_target_local_ned` messages to fully control the desired and current position of the UAV.
 
 
 ## Setting Up Repo
@@ -14,18 +14,21 @@ git submodule update
 ```
 ## Setting up the PX4 Compatible Board
 
-Using px4 v1.7.3 the steps to send position data.
-Build the lpe release of px4. (https://dev.px4.io/en/setup/building_px4.html) and upload it.
+Using px4 v1.8.0 the steps to send position data are as follows.
+
+Build the regular release of px4. (https://dev.px4.io/en/setup/building_px4.html) and upload it. Or try to install the latest version available on QGroundControl.
 
 ```
-make px4fmu-v2_lpe
-make px4fmu-v2_lpe upload
+make px4fmu-v2_default
+make px4fmu-v2_default upload
 ```
 
 * Select a multirotor airframe.
-* Change SYS_MC_EST_GROUP to LPE.
-* Change LPE_FUSION to accept vision information.
+* Change EKF2_AID_MASK to accept vision information. (set value to 24 to completely disable GPS and only use vision)
+* Change EKFS_HGT_MODE to Vision.
 * Change SYS_COMPANION to 921600.
+
+Power the px4 via battery. I have experienced issues with the local_position_target message when powered via usb.
 
 ## Making And Running the Example
 Set up the serial port name in main.cpp 
@@ -106,7 +109,7 @@ A periodic message class has been made to allow for periodic messages to be sent
 Setting up Periodic_Message object.
 ```
 mavlink_message_t current_position_message;
-int frequency = 10; // frequency in Hertz
+int frequency = 10; // frequency in Hz
 Periodic_Message current_position_periodic(*mti, current_position_message, frequency);
 ```
 

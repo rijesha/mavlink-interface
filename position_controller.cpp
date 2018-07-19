@@ -11,7 +11,6 @@ Position_Controller::Position_Controller(Multithreaded_Interface *mti)
 	desired_position.type_mask = MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION;
 	desired_position.coordinate_frame = MAV_FRAME_LOCAL_NED;
 
-	current_position_periodic = new Periodic_Message(mti, current_position_message, 10);
 	desired_position_periodic = new Periodic_Message(mti, desired_position_message, 10);
 
 	update_current_position(0, 0, 0, 0);
@@ -26,7 +25,7 @@ void Position_Controller::update_current_position(float x, float y, float z, flo
 	current_position.yaw = yaw;
 
 	mavlink_msg_vision_position_estimate_encode(system_id, companion_id, &current_position_message, &current_position);
-	current_position_periodic->update_message(current_position_message);
+	mti->write_message(current_position_message);
 }
 
 void Position_Controller::update_desired_position(float x, float y, float z, float yaw)

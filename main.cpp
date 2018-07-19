@@ -3,8 +3,8 @@
 #include <stdio.h> // Standard input/output definitions
 #include "position_controller.h"
 
-#define PORT "/dev/ttyS1"
-#define BAUD 57600
+#define PORT "/dev/ttyUSB0"
+#define BAUD 921600
 
 void new_msg_callback(mavlink_message_t message)
 {
@@ -38,33 +38,45 @@ int main()
 
     Position_Controller p(&mti);
 
-    cout << "Streaming 100 Position Messages before continuing" << endl;
-    for (int ind = 0; ind < 10; ind++)
-    {
-        chrono::milliseconds k(1000);
+    int x = 25;
+    int y = 125;
+    int z = 250;
+
+    cout << "Streaming 200 Position Messages before continuing" << endl;
+    for (int ind = 0; ind < 200; ind++)
+    {   
+        p.update_current_position(x, y, z, 0);
+        chrono::milliseconds k(100);
         this_thread::sleep_for(k);
         cout << "." << flush;
     }
 
     p.toggle_offboard_control(true);
 
-    int i = 0;
-
-    int x = 25;
-    int y = 125;
-    int z = 250;
-
     mti.bind_new_msg_callback(new_msg_callback);
     cout << "Bound Message CallBack" << endl;
 
-    while (i < 5)
+    //This loop allows emulates new vision information being generated at 10 hz and target location updating at 0.5 Hz. It also print the last received attitude msg at 0.5 Hz
+    int count = 0;
+    int i = 0;
+
+    while (i < 10)
     {
-        i++;
-        decode_last_attitude_msg(&mti);
+        
+        count++;
+        
         p.update_current_position(x + i * 10, y + i * 10, z + i * 10, 0);
-        p.update_desired_position(x + i * 5, y + i * 5, z + i * 5, 0);
-        cout << "Updated Current and Desired Position " << endl;
-        chrono::milliseconds j(5000);
+
+        if (count == 18)
+        {
+            count = 0;
+            i++;
+            cout << "Updated Desired Position " << endl;
+            p.update_desired_position(x + i * 5, y + i * 5, z + i * 5, 0);
+            decode_last_attitude_msg(&mti);
+        }
+        
+        chrono::milliseconds j(100);
         this_thread::sleep_for(j);
     }
 
