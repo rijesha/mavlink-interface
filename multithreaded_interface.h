@@ -8,6 +8,7 @@
 #include <thread>
 #include <chrono>
 #include <ctime>
+#include <functional>
 
 using namespace std;
 

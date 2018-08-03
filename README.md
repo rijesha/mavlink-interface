@@ -9,6 +9,7 @@ This is a really simple class that can be used to send both `vision_position_est
 ## Setting Up Repo
 ```
 git clone https://github.com/rijesha/mavlink-interface
+cd mavlink-interface
 git submodule init
 git submodule update
 ```
@@ -31,7 +32,7 @@ make px4fmu-v2_default upload
 Power the px4 via battery. I have experienced issues with the local_position_target message when powered via usb.
 
 ## Making And Running the Example
-Set up the serial port name in main.cpp 
+Set up the serial port name in main.cpp
 ```
 #define PORT "/dev/ttyUSB0"
 #define BAUD 921600
