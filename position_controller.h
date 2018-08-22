@@ -25,6 +25,8 @@ public:
   
   void toggle_offboard_control(bool flag);
 
+  float getLastAttitudeYaw();
+
   void shutdown();
 };
 

@@ -59,6 +59,23 @@ void Position_Controller::toggle_offboard_control(bool flag)
 	mti->write_message(message);
 }
 
+float Position_Controller::getLastAttitudeYaw()
+{
+	auto search = mti->last_messages.find(MAVLINK_MSG_ID_ATTITUDE);
+    if (search != mti->last_messages.end())
+    {
+        mavlink_attitude_t att;
+        mavlink_msg_attitude_decode(&(search->second), &att);
+        //printf("[Roll Pitch Yaw] = [%f %f %f] \n", att.roll, att.pitch, att.yaw);
+		return att.yaw;
+    }
+    else
+    {
+        std::cout << "Attitude Message Not found\n";
+		return 0;
+    }
+}
+
 void Position_Controller::shutdown()
 {
 	mti->shutdown();

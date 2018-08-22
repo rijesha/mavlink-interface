@@ -3,8 +3,8 @@
 #include <stdio.h> // Standard input/output definitions
 #include "position_controller.h"
 
-#define PORT "/dev/ttyUSB0"
-#define BAUD 921600
+#define PORT "/dev/ttyS1"
+#define BAUD 57600
 
 void new_msg_callback(mavlink_message_t message)
 {
@@ -75,6 +75,7 @@ int main()
             p.update_desired_position(x + i * 5, y + i * 5, z + i * 5, 0);
             decode_last_attitude_msg(&mti);
         }
+        cout << "YAW: " << p.getLastAttitudeYaw() << endl;
         
         chrono::milliseconds j(100);
         this_thread::sleep_for(j);
