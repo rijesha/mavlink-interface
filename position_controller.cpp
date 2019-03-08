@@ -4,6 +4,8 @@ int system_id = 1;
 int autopilot_id = 1;
 int companion_id = 0;
 
+#define CLOCKS_PER_USEC CLOCKS_PER_SEC/1000000
+
 Position_Controller::Position_Controller(Multithreaded_Interface *mti)
 {
 	this->mti = mti;
@@ -13,16 +15,17 @@ Position_Controller::Position_Controller(Multithreaded_Interface *mti)
 
 	desired_position_periodic = new Periodic_Message(mti, desired_position_message, 10);
 
-	update_current_position(0, 0, 0, 0);
+	update_current_position(0, 0, 0, 0, clock());
 	update_desired_position(0, 0, 0, 0);
 }
 
-void Position_Controller::update_current_position(float x, float y, float z, float yaw)
+void Position_Controller::update_current_position(float x, float y, float z, float yaw, clock_t startTime)
 {
 	current_position.x = x;
 	current_position.y = y;
 	current_position.z = z;
 	current_position.yaw = yaw;
+	current_position.usec = double(clock() - startTime) / CLOCKS_PER_USEC;
 
 	mavlink_msg_vision_position_estimate_encode(system_id, companion_id, &current_position_message, &current_position);
 	mti->write_message(current_position_message);

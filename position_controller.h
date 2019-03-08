@@ -20,7 +20,7 @@ public:
 
   Periodic_Message *desired_position_periodic;
 
-  void update_current_position(float x, float y, float z, float yaw);
+  void update_current_position(float x, float y, float z, float yaw, clock_t time);
   void update_desired_position(float x, float y, float z, float yaw);
   
   void toggle_offboard_control(bool flag);
