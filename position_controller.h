@@ -29,7 +29,7 @@ public:
   void update_current_position(float x, float y, float z, float yaw);
   void update_desired_position(float x, float y, float z, float yaw);
   
-  void update_attitude_target(float pitch_target, float roll_target, float yaw_target, float vel_z);
+  void update_attitude_target(float pitch_target, float roll_target, float yaw_target, float ratio_of_vel_z_to_default_speed_up, float yaw_rate = 0, float use_yaw_rate = false);
   
   void toggle_offboard_control(bool flag);
 
