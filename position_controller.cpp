@@ -46,10 +46,10 @@ void Position_Controller::update_desired_position(float x, float y, float z, flo
 	desired_position.target_component = 0;
 
 	mavlink_msg_set_position_target_local_ned_encode(system_id, companion_id, &desired_position_message, &desired_position);
-	desired_position_periodic->update_message(desired_position_message);
+	mti->write_message(desired_position_message);
 }
 
-void Position_Controller::update_attitude_target(float pitch_target, float roll_target, float yaw_target, float ratio_of_vel_z_to_default_speed_up, float yaw_rate, float use_yaw_rate)
+void Position_Controller::update_attitude_target(float pitch_target, float roll_target, float yaw_target, float ratio_of_vel_z_to_default_speed_up, float yaw_rate, bool use_yaw_rate)
 {
 	float cr2 = cosf(roll_target*M_PI/180.0f*0.5f);
 	float cp2 = cosf(pitch_target*M_PI/180.0f*0.5f);
@@ -64,9 +64,8 @@ void Position_Controller::update_attitude_target(float pitch_target, float roll_
 	attitude_target.q[3] = cr2*cp2*sy2 - sr2*sp2*cy2;
 
 	float thrust = (ratio_of_vel_z_to_default_speed_up)/(2.0) + 0.5;
-	float thrust = bind_max_value(thrust,1,0);
 
-	attitude_target.thrust = thrust;
+	attitude_target.thrust = bind_max_value(thrust,1,0);
 
 	attitude_target.target_system = 1;
 	attitude_target.target_component = 0;
