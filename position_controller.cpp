@@ -42,7 +42,7 @@ void Position_Controller::update_desired_position(float x, float y, float z, flo
 	desired_position.y = y;
 	desired_position.z = z;
 	desired_position.yaw = yaw;
-	desired_position.target_system = 1;
+	desired_position.target_system = 0;
 	desired_position.target_component = 0;
 
 	mavlink_msg_set_position_target_local_ned_encode(system_id, companion_id, &desired_position_message, &desired_position);
@@ -67,11 +67,11 @@ void Position_Controller::update_attitude_target(float pitch_target, float roll_
 
 	attitude_target.thrust = bind_max_value(thrust,1,0);
 
-	attitude_target.target_system = 1;
+	attitude_target.target_system = 0;
 	attitude_target.target_component = 0;
 
 	attitude_target.type_mask = 0x3 | (0x4 && !use_yaw_rate);
-	attitude_target.body_yaw_rate = yaw_rate;
+	attitude_target.body_yaw_rate = yaw_rate*M_PI/180.0f;
 
 	mavlink_msg_set_attitude_target_encode(system_id, companion_id, &attitude_target_message, &attitude_target);
 	mti->write_message(attitude_target_message);
