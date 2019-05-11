@@ -21,8 +21,8 @@ Position_Controller::Position_Controller(Multithreaded_Interface *mti)
 
 	//desired_position_periodic = new Periodic_Message(mti, desired_position_message, 10);
 
-	update_current_position(0, 0, 0, 0);
-	update_desired_position(0, 0, 0, 0);
+	//update_current_position(0, 0, 0, 0);
+	//update_desired_position(0, 0, 0, 0);
 }
 
 void Position_Controller::update_current_position(float x, float y, float z, float yaw)
@@ -63,15 +63,17 @@ void Position_Controller::update_attitude_target(float pitch_target, float roll_
 	attitude_target.q[2] = cr2*sp2*cy2 + sr2*cp2*sy2;
 	attitude_target.q[3] = cr2*cp2*sy2 - sr2*sp2*cy2;
 
+	ratio_of_vel_z_to_default_speed_up = bind_max_value(ratio_of_vel_z_to_default_speed_up,1,-1);
+	
 	float thrust = (ratio_of_vel_z_to_default_speed_up)/(2.0) + 0.5;
 
-	attitude_target.thrust = bind_max_value(thrust,1,0);
+	attitude_target.thrust = thrust;
 
 	attitude_target.target_system = 1;
 	attitude_target.target_component = 0;
 
-	attitude_target.type_mask = 0x3 | (0x4 && !use_yaw_rate);
-	attitude_target.body_yaw_rate = yaw_rate;
+	attitude_target.type_mask = 0x0;
+	attitude_target.body_yaw_rate = yaw_rate*M_PI/180.0f;
 
 	mavlink_msg_set_attitude_target_encode(system_id, companion_id, &attitude_target_message, &attitude_target);
 	mti->write_message(attitude_target_message);
