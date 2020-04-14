@@ -1,19 +1,26 @@
-cmake_minimum_required(VERSION 3.0)
-project(mavlink_interface)
+# mavlink-interface/CMakeLists.txt
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -DSTANDALONE")
+cmake_minimum_required(VERSION 3.15)
 
-set(SOURCE_FILES
-        main.cpp
+project(mavlink-interface VERSION 0.1.0
+        DESCRIPTION "mavlink-interface library"
+        LANGUAGES CXX)
+
+add_library(${PROJECT_NAME} STATIC)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+target_sources(${PROJECT_NAME}
+    PUBLIC
         msg_queue.h
-        multithreaded_interface.cpp
         multithreaded_interface.h
-        position_controller.cpp
         position_controller.h
+        serial_port.h
+    PRIVATE
+        main.cpp
+        multithreaded_interface.cpp
+        position_controller.cpp
         serial_port.cpp
-        serial_port.h)
+)
 
-add_executable(mavlink_interface ${SOURCE_FILES})
+target_include_directories(${PROJECT_NAME} PUBLIC ./ mavlink_c_library_v1)
+
 include_directories(mavlink_c_library_v1)
-target_link_libraries(mavlink_interface pthread)

@@ -62,7 +62,7 @@
 #include <pthread.h> // This uses POSIX Threads
 #include <signal.h>
 
-#include <mavlink.h>
+#include <ardupilotmega/mavlink.h>
 
 // ------------------------------------------------------------------------------
 //   Defines
