@@ -15,7 +15,6 @@ target_sources(${PROJECT_NAME}
         position_controller.h
         serial_port.h
     PRIVATE
-        main.cpp
         multithreaded_interface.cpp
         position_controller.cpp
         serial_port.cpp
@@ -24,3 +23,5 @@ target_sources(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PUBLIC ./ mavlink_c_library_v1)
 
 include_directories(mavlink_c_library_v1)
+
+
