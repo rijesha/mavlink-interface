@@ -2,7 +2,7 @@
 #define POSITION_CONTROLLER_H
 
 #include "multithreaded_interface.h"
-#include <ardupilotmega/mavlink.h>
+#include <compVisionModule/mavlink.h>
 
 #define MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION 0b0000101111111000
 

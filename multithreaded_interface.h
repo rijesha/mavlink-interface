@@ -3,7 +3,7 @@
 
 #include "msg_queue.h"
 #include "serial_port.h"
-#include <ardupilotmega/mavlink.h>
+#include <compVisionModule/mavlink.h>
 #include <map>
 #include <thread>
 #include <chrono>
