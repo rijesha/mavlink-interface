@@ -65,13 +65,75 @@ public:
         ssize_t recsize = recvfrom(sock, (void *)recv_buf, BUFFER_LENGTH, 0, (struct sockaddr *)&gcAddr, &fromlen);
         if (recsize > 0)
         {
-            // Something received - print out all bytes and parse packet
             mavlink_status_t status;
-
             for (int i = 0; i < recsize; ++i)
             {
                 uint8_t temp = recv_buf[i];
                 if (mavlink_parse_char(MAVLINK_COMM_0, recv_buf[i], &msg, &status))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+
+class UdpClient
+{
+private:
+    int sockfd;
+    uint8_t send_buffer[1024];
+    uint8_t recv_buffer[1024];
+    struct sockaddr_in servaddr;
+    socklen_t fromlen = sizeof(sockaddr_in);
+
+public:
+    UdpClient(int port = 14560)
+    {
+        // Creating socket file descriptor
+        if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+        {
+            perror("socket creation failed");
+            exit(EXIT_FAILURE);
+        }
+
+        memset(&servaddr, 0, sizeof(servaddr));
+
+        // Filling server information
+        servaddr.sin_family = AF_INET;
+        servaddr.sin_port = htons(port);
+        servaddr.sin_addr.s_addr = INADDR_ANY;
+    };
+
+    void shutdown()
+    {
+        close(sockfd);
+    }
+
+    void write_message(const mavlink_message_t &msg)
+    {
+        uint16_t len = mavlink_msg_to_send_buffer(send_buffer, &msg);
+        auto bytes_sent = sendto(sockfd, send_buffer, len,
+                                 MSG_CONFIRM, (const struct sockaddr *)&servaddr,
+                                 sizeof(servaddr));
+    }
+
+    bool read_message(mavlink_message_t &msg)
+    {
+        memset(recv_buffer, 0, BUFFER_LENGTH);
+        int len;
+        ssize_t recsize = recvfrom(sockfd, recv_buffer, 1024,
+                                   MSG_WAITALL, (struct sockaddr *)&servaddr,
+                                   &fromlen);
+
+        if (recsize > 0)
+        {
+            mavlink_status_t status;
+            for (int i = 0; i < recsize; ++i)
+            {
+                uint8_t temp = recv_buffer[i];
+                if (mavlink_parse_char(MAVLINK_COMM_0, recv_buffer[i], &msg, &status))
                 {
                     return true;
                 }

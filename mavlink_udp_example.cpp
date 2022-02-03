@@ -23,7 +23,7 @@
  
  I compiled this program sucessfully on Ubuntu 10.04 with the following command
  
- g++ -std=c++14 -pthread -I mavlink_c_library_v1/common -o mavlink_udp mavlink_udp.cpp && ./mavlink_udp 127.0.0.1
+ g++ -std=c++14 -pthread -I mavlink_c_library_v1/common -o mavlink_udp mavlink_udp_example.cpp && ./mavlink_udp 127.0.0.1
 
  the rt library is needed for the clock_gettime on linux
  */
@@ -69,7 +69,9 @@ int main(int argc, char *argv[])
 		strcpy(target_ip, argv[1]);
 	}
 
-	UdpDevice udp_device(target_ip, 14561, 14560);
+	//UdpDevice udp_device(target_ip, 14560, 14561);
+	UdpClient udp_device(14560);
+	
 	read_thread = std::thread([&udp_device]()
 							  {
 								  mavlink_message_t msg;
