@@ -47,28 +47,27 @@ public:
             exit(EXIT_FAILURE);
         }
 
-        memset(&gcAddr, 0, sizeof(gcAddr));
-        gcAddr.sin_family = AF_INET;
-        gcAddr.sin_addr.s_addr = inet_addr(target_ip);
-        gcAddr.sin_port = htons(target_port);
+        //memset(&gcAddr, 0, sizeof(gcAddr));
+        //gcAddr.sin_family = AF_INET;
+        //gcAddr.sin_addr.s_addr = inet_addr(target_ip);
+        //gcAddr.sin_port = htons(target_port);
     };
 
     void write_message(const mavlink_message_t &msg)
     {
         uint16_t len = mavlink_msg_to_send_buffer(send_buf, &msg);
-        auto bytes_sent = sendto(sock, send_buf, len, 0, (struct sockaddr *)&gcAddr, sizeof(struct sockaddr_in));
+        auto bytes_sent = sendto(sock, send_buf, len, 0, (struct sockaddr *)&locAddr, sizeof(struct sockaddr_in));
     }
 
     bool read_message(mavlink_message_t &msg)
     {
         memset(recv_buf, 0, BUFFER_LENGTH);
-        ssize_t recsize = recvfrom(sock, (void *)recv_buf, BUFFER_LENGTH, 0, (struct sockaddr *)&gcAddr, &fromlen);
+        ssize_t recsize = recvfrom(sock, (void *)recv_buf, BUFFER_LENGTH, 0, (struct sockaddr *)&locAddr, &fromlen);
         if (recsize > 0)
         {
             mavlink_status_t status;
             for (int i = 0; i < recsize; ++i)
             {
-                uint8_t temp = recv_buf[i];
                 if (mavlink_parse_char(MAVLINK_COMM_0, recv_buf[i], &msg, &status))
                 {
                     return true;
@@ -114,9 +113,11 @@ public:
     void write_message(const mavlink_message_t &msg)
     {
         uint16_t len = mavlink_msg_to_send_buffer(send_buffer, &msg);
+        
         auto bytes_sent = sendto(sockfd, send_buffer, len,
-                                 MSG_CONFIRM, (const struct sockaddr *)&servaddr,
+                                 0, (const struct sockaddr *)&servaddr,
                                  sizeof(servaddr));
+                                         printf("sending fun");
     }
 
     bool read_message(mavlink_message_t &msg)
@@ -124,15 +125,13 @@ public:
         memset(recv_buffer, 0, BUFFER_LENGTH);
         int len;
         ssize_t recsize = recvfrom(sockfd, recv_buffer, 1024,
-                                   MSG_WAITALL, (struct sockaddr *)&servaddr,
+                                   0, (struct sockaddr *)&servaddr,
                                    &fromlen);
-
         if (recsize > 0)
         {
             mavlink_status_t status;
             for (int i = 0; i < recsize; ++i)
             {
-                uint8_t temp = recv_buffer[i];
                 if (mavlink_parse_char(MAVLINK_COMM_0, recv_buffer[i], &msg, &status))
                 {
                     return true;
