@@ -10,17 +10,17 @@ add_library(${PROJECT_NAME} STATIC)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_sources(${PROJECT_NAME}
     PUBLIC
-        msg_queue.h
-        multithreaded_interface.h
-        position_controller.h
-        serial_port.h
+        include/multithreaded_interface.h
+        include/position_controller.h
+        include/serial_port.h
     PRIVATE
-        multithreaded_interface.cpp
-        position_controller.cpp
-        serial_port.cpp
+        include/msg_queue.h
+        src/multithreaded_interface.cpp
+        src/position_controller.cpp
+        src/serial_port.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ./ mavlink_c_library_v1)
+target_include_directories(${PROJECT_NAME} PUBLIC ./include mavlink_c_library_v1)
 
 include_directories(mavlink_c_library_v1)
 
