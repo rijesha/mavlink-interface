@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 		strcpy(target_ip, argv[1]);
 	}
 
-	UdpDevice udp_device(target_ip);
+	UdpDevice udp_device(target_ip, 14561, 14560);
 	read_thread = std::thread([&udp_device]()
 							  {
 								  mavlink_message_t msg;
@@ -99,6 +99,8 @@ int main(int argc, char *argv[])
 		/* Send attitude */
 		mavlink_msg_attitude_pack(1, 200, &msg, microsSinceEpoch(), 1.2, 1.7, 3.14, 0.01, 0.02, 0.03);
 		udp_device.write_message(msg);
+		
+        printf("sending data\n");
 		sleep(1);
 	}
 }

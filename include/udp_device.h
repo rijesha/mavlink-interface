@@ -55,7 +55,6 @@ public:
 
     void write_message(const mavlink_message_t &msg)
     {
-        printf("sending data\n");
         uint16_t len = mavlink_msg_to_send_buffer(send_buf, &msg);
         auto bytes_sent = sendto(sock, send_buf, len, 0, (struct sockaddr *)&gcAddr, sizeof(struct sockaddr_in));
     }
