@@ -11,17 +11,16 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_sources(${PROJECT_NAME}
     PUBLIC
         include/multithreaded_interface.h
-        include/position_controller.h
         include/serial_port.h
+        include/udp_device.h
     PRIVATE
         include/msg_queue.h
         src/multithreaded_interface.cpp
-        src/position_controller.cpp
         src/serial_port.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ./include mavlink_c_library_v1)
+target_include_directories(${PROJECT_NAME} PUBLIC ./include mavlink_c_library_v2/ardupilotmega)
 
-include_directories(mavlink_c_library_v1)
+include_directories(mavlink_c_library_v2)
 
 

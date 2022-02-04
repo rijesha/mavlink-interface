@@ -47,8 +47,7 @@
  *
  */
 
-#ifndef SERIAL_PORT_H_
-#define SERIAL_PORT_H_
+#pragma once
 
 // ------------------------------------------------------------------------------
 //   Includes
@@ -63,7 +62,6 @@
 #include <signal.h>
 
 #include <mavlink.h>
-
 
 // ------------------------------------------------------------------------------
 //   Defines
@@ -126,4 +124,3 @@ class SerialPort
 	bool _setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_control);
 };
 
-#endif // SERIAL_PORT_H_

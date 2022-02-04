@@ -1,3 +1,4 @@
+#pragma once
 /* This assumes you have the mavlink headers on your include path
  or in the same folder as this source file */
 #include <mavlink.h>
@@ -32,7 +33,7 @@ private:
     socklen_t fromlen = sizeof(gcAddr);
 
 public:
-    UdpDevice(char *target_ip, int local_addr_port = 14551, int target_port = 14550)
+    UdpDevice(const char *target_ip, int local_addr_port = 14551, int target_port = 14550)
     {
         memset(&locAddr, 0, sizeof(locAddr));
         locAddr.sin_family = AF_INET;

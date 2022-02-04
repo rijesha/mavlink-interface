@@ -1,5 +1,4 @@
-#ifndef MULTITHREADED_INTERFACE_H
-#define MULTITHREADED_INTERFACE_H
+#pragma once
 
 #include "msg_queue.h"
 #include "serial_port.h"
@@ -10,6 +9,7 @@
 #include <chrono>
 #include <ctime>
 #include <functional>
+#include <vector>
 
 using namespace std;
 
@@ -29,41 +29,42 @@ public:
   long int timestamp = 0;
 };
 
+typedef std::function<void(const mavlink_message_t &msg)> mavlink_msg_callback;
+
 class MultithreadedInterface
 {
 private:
-  SerialPort* serial_interface_{};
-  UdpDevice* udp_interface_{};
-
-  void start();
-
-public:
-  MultithreadedInterface(SerialPort& interface);
-  MultithreadedInterface(UdpDevice& interface);
-
-  void shutdown();
+  SerialPort *serial_interface_{};
+  UdpDevice *udp_interface_{};
 
   map<int, mavlink_message_t> last_messages;
   MessageQueue<mavlink_message_t> msg_queue;
 
+  vector<mavlink_msg_callback> new_msg_callbacks;
+
   thread write_th;
   thread read_th;
 
-  void write_message(mavlink_message_t message);
+  void start();
 
   void start_reader_thread();
   void start_writer_thread();
 
   void reader_thread();
+
+public:
+  MultithreadedInterface(SerialPort &interface);
+  MultithreadedInterface(UdpDevice &interface);
+
+  void shutdown();
+
+  void write_message(const mavlink_message_t &message);
+
   bool add_periodic_message(PeriodicMessage *pm);
   bool running = false;
 
   vector<PeriodicMessage *> pm_container;
-  void bind_new_msg_callback(std::function<void(mavlink_message_t)>);
-
-  std::function<void(mavlink_message_t)> _cb;
-  bool callback_registered = false;
-
+  void bind_new_msg_callback(mavlink_msg_callback);
 };
 
 class PeriodicMessage
@@ -88,5 +89,3 @@ public:
   thread th;
   bool running = false;
 };
-
-#endif // MULTITHREADED_INTERFACE_H

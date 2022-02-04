@@ -35,7 +35,7 @@ void MultithreadedInterface::start()
     start_reader_thread();
 }
 
-void MultithreadedInterface::write_message(mavlink_message_t msg)
+void MultithreadedInterface::write_message(const mavlink_message_t &msg)
 {
     msg_queue.push(msg);
 }
@@ -71,7 +71,8 @@ void MultithreadedInterface::shutdown()
 {
     running = false;
     cout << "SHUTTING DOWN" << endl;
-    if (serial_interface_){
+    if (serial_interface_)
+    {
         serial_interface_->close_serial();
     }
     if (read_th.joinable())
@@ -103,18 +104,17 @@ void MultithreadedInterface::reader_thread()
         if (success)
         {
             last_messages[message.msgid] = message;
-            if (callback_registered)
+            for (const auto &cb : new_msg_callbacks)
             {
-                _cb(message);
+                cb(message);
             }
         }
     }
 }
 
-void MultithreadedInterface::bind_new_msg_callback(std::function<void(mavlink_message_t)> cb)
+void MultithreadedInterface::bind_new_msg_callback(mavlink_msg_callback cb)
 {
-    _cb = cb;
-    callback_registered = true;
+    new_msg_callbacks.push_back(cb);
 }
 
 PeriodicMessage::PeriodicMessage() {}

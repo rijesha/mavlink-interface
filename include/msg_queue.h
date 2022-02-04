@@ -1,5 +1,4 @@
-#ifndef MSG_QUEUE_H
-#define MSG_QUEUE_H
+#pragma once
 
 #include <iostream>
 #include <queue>
@@ -71,5 +70,3 @@ void MessageQueue<T>::shutdown() {
     newDataInQueue.notify_all();
     queueLockMtx.unlock();
 }
-
-#endif
