@@ -51,7 +51,7 @@
 //   Includes
 // ------------------------------------------------------------------------------
 
-#include "serial_port.h"
+#include "../include/serial_port.h"
 
 // ----------------------------------------------------------------------------------
 //   Serial Port Manager Class
@@ -60,19 +60,20 @@
 // ------------------------------------------------------------------------------
 //   Con/De structors
 // ------------------------------------------------------------------------------
-Serial_Port::Serial_Port(const char *uart_name_, int baudrate_)
+SerialPort::SerialPort(const char *uart_name_, int baudrate_)
 {
 	initialize_defaults();
 	uart_name = uart_name_;
 	baudrate = baudrate_;
+	start();
 }
 
-Serial_Port::Serial_Port()
+SerialPort::SerialPort()
 {
 	initialize_defaults();
 }
 
-void Serial_Port::initialize_defaults()
+void SerialPort::initialize_defaults()
 {
 	// Initialize attributes
 	debug = false;
@@ -86,7 +87,7 @@ void Serial_Port::initialize_defaults()
 // ------------------------------------------------------------------------------
 //   Read from Serial
 // ------------------------------------------------------------------------------
-int Serial_Port::read_message(mavlink_message_t &message)
+int SerialPort::read_message(mavlink_message_t &message)
 {
 	uint8_t cp;
 	mavlink_status_t status;
@@ -162,7 +163,7 @@ int Serial_Port::read_message(mavlink_message_t &message)
 // ------------------------------------------------------------------------------
 //   Write to Serial
 // ------------------------------------------------------------------------------
-int Serial_Port::write_message(const mavlink_message_t &message)
+int SerialPort::write_message(const mavlink_message_t &message)
 {
 	if (message.len < 1)
 	{
@@ -185,7 +186,7 @@ int Serial_Port::write_message(const mavlink_message_t &message)
 /**
  * throws EXIT_FAILURE if could not open the port
  */
-void Serial_Port::open_serial()
+void SerialPort::open_serial()
 {
 
 	// --------------------------------------------------------------------------
@@ -237,7 +238,7 @@ void Serial_Port::open_serial()
 // ------------------------------------------------------------------------------
 //   Close Serial Port
 // ------------------------------------------------------------------------------
-void Serial_Port::close_serial()
+void SerialPort::close_serial()
 {
 	printf("CLOSE PORT\n");
 
@@ -256,12 +257,12 @@ void Serial_Port::close_serial()
 // ------------------------------------------------------------------------------
 //   Convenience Functions
 // ------------------------------------------------------------------------------
-void Serial_Port::start()
+void SerialPort::start()
 {
 	open_serial();
 }
 
-void Serial_Port::stop()
+void SerialPort::stop()
 {
 	close_serial();
 }
@@ -269,7 +270,7 @@ void Serial_Port::stop()
 // ------------------------------------------------------------------------------
 //   Quit Handler
 // ------------------------------------------------------------------------------
-void Serial_Port::handle_quit(int sig)
+void SerialPort::handle_quit(int sig)
 {
 	try
 	{
@@ -285,7 +286,7 @@ void Serial_Port::handle_quit(int sig)
 //   Helper Function - Open Serial Port File Descriptor
 // ------------------------------------------------------------------------------
 // Where the actual port opening happens, returns file descriptor 'fd'
-int Serial_Port::_open_port(const char *port)
+int SerialPort::_open_port(const char *port)
 {
 	// Open serial port
 	// O_RDWR - Read and write
@@ -312,7 +313,7 @@ int Serial_Port::_open_port(const char *port)
 //   Helper Function - Setup Serial Port
 // ------------------------------------------------------------------------------
 // Sets configuration, flags, and baud rate
-bool Serial_Port::_setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_control)
+bool SerialPort::_setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_control)
 {
 	// Check file descriptor
 	if (!isatty(fd))
@@ -446,12 +447,12 @@ bool Serial_Port::_setup_port(int baud, int data_bits, int stop_bits, bool parit
 	return true;
 }
 
-int Serial_Port::_read_port(uint8_t &cp)
+int SerialPort::_read_port(uint8_t &cp)
 {
 	return read(fd, &cp, 1);
 }
 
-int Serial_Port::_write_port(char *buf, unsigned len)
+int SerialPort::_write_port(char *buf, unsigned len)
 {
 	// Write packet via serial link
 	const int bytesWritten = static_cast<int>(write(fd, buf, len));

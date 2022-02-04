@@ -57,6 +57,7 @@ public:
     {
         uint16_t len = mavlink_msg_to_send_buffer(send_buf, &msg);
         auto bytes_sent = sendto(sock, send_buf, len, 0, (struct sockaddr *)&locAddr, sizeof(struct sockaddr_in));
+        (void)bytes_sent;
     }
 
     bool read_message(mavlink_message_t &msg)
@@ -113,17 +114,16 @@ public:
     void write_message(const mavlink_message_t &msg)
     {
         uint16_t len = mavlink_msg_to_send_buffer(send_buffer, &msg);
-        
+
         auto bytes_sent = sendto(sockfd, send_buffer, len,
                                  0, (const struct sockaddr *)&servaddr,
                                  sizeof(servaddr));
-                                         printf("sending fun");
+        (void)bytes_sent;
     }
 
     bool read_message(mavlink_message_t &msg)
     {
         memset(recv_buffer, 0, BUFFER_LENGTH);
-        int len;
         ssize_t recsize = recvfrom(sockfd, recv_buffer, 1024,
                                    0, (struct sockaddr *)&servaddr,
                                    &fromlen);

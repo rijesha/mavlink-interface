@@ -2,11 +2,12 @@
 CC = g++
 
 # Names and flags
-INC_DIR = mavlink_c_library_v1
-CPPSOURCES += $(wildcard *.cpp)
+INC_DIR = mavlink_c_library_v2/ardupilotmega
+CPPSOURCES += $(wildcard src/*.cpp)
+CPPSOURCES += $(wildcard main.cpp)
 
 OBJECTS = $(CPPSOURCES:.cpp=.o)
-EXECUTABLE = position_controller
+EXECUTABLE = mavlink_interface
 CFLAGS = -c -Wall -g -I $(INC_DIR) -g -DSTANDALONE
 LIBS =
 

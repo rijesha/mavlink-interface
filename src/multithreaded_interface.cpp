@@ -1,4 +1,4 @@
-#include "multithreaded_interface.h"
+#include "../include/multithreaded_interface.h"
 
 long int get_curent_time()
 {
@@ -7,11 +7,7 @@ long int get_curent_time()
     return ms;
 }
 
-Multithreaded_Interface::Multithreaded_Interface()
-{
-}
-
-bool Multithreaded_Interface::add_periodic_message(Periodic_Message *pm)
+bool MultithreadedInterface::add_periodic_message(PeriodicMessage *pm)
 {
     if (running == false)
         return false;
@@ -20,44 +16,64 @@ bool Multithreaded_Interface::add_periodic_message(Periodic_Message *pm)
     return true;
 }
 
-void Multithreaded_Interface::start(const char *port, int baud)
+MultithreadedInterface::MultithreadedInterface(SerialPort &interface)
 {
-    serial_port.uart_name = port;
-    serial_port.baudrate = baud;
-    serial_port.start();
-    running = true;
+    serial_interface_ = &interface;
+    start();
+}
 
+MultithreadedInterface::MultithreadedInterface(UdpDevice &interface)
+{
+    udp_interface_ = &interface;
+    start();
+}
+
+void MultithreadedInterface::start()
+{
+    running = true;
     start_writer_thread();
     start_reader_thread();
 }
 
-void Multithreaded_Interface::write_message(mavlink_message_t msg)
+void MultithreadedInterface::write_message(mavlink_message_t msg)
 {
     msg_queue.push(msg);
 }
 
-void Multithreaded_Interface::start_writer_thread()
+void MultithreadedInterface::start_writer_thread()
 {
-    running = true;
-    write_th = thread([=]() {
-        while (running)
-        {
-            serial_port.write_message(msg_queue.pop(200));
-        }
-    });
+    write_th = thread([=]()
+                      {
+                          if (serial_interface_)
+                          {
+                              while (running)
+                              {
+                                  serial_interface_->write_message(msg_queue.pop(200));
+                              }
+                          }
+                          else
+                          {
+                              while (running)
+                              {
+                                  udp_interface_->write_message(msg_queue.pop(200));
+                              }
+                          }
+                      });
 }
 
-void Multithreaded_Interface::start_reader_thread()
+void MultithreadedInterface::start_reader_thread()
 {
-    read_th = thread([=]() {
-        reader_thread();
-    });
+    read_th = thread([=]()
+                     { reader_thread(); });
 }
 
-void Multithreaded_Interface::shutdown()
+void MultithreadedInterface::shutdown()
 {
     running = false;
     cout << "SHUTTING DOWN" << endl;
+    if (serial_interface_){
+        serial_interface_->close_serial();
+    }
     if (read_th.joinable())
         read_th.join();
     if (write_th.joinable())
@@ -67,16 +83,22 @@ void Multithreaded_Interface::shutdown()
         pm_container.back()->stop_message();
         pm_container.pop_back();
     }
-    serial_port.stop();
 }
 
-void Multithreaded_Interface::reader_thread()
+void MultithreadedInterface::reader_thread()
 {
     bool success;
     while (running)
     {
         mavlink_message_t message;
-        success = serial_port.read_message(message);
+        if (serial_interface_)
+        {
+            success = serial_interface_->read_message(message);
+        }
+        else
+        {
+            success = udp_interface_->read_message(message);
+        }
 
         if (success)
         {
@@ -89,75 +111,76 @@ void Multithreaded_Interface::reader_thread()
     }
 }
 
-void Multithreaded_Interface::bind_new_msg_callback(std::function<void(mavlink_message_t)> cb)
+void MultithreadedInterface::bind_new_msg_callback(std::function<void(mavlink_message_t)> cb)
 {
     _cb = cb;
     callback_registered = true;
 }
 
-Periodic_Message::Periodic_Message() {}
+PeriodicMessage::PeriodicMessage() {}
 
-Periodic_Message::Periodic_Message(Multithreaded_Interface *mti, mavlink_message_t msg, float frequency) : mti(mti), msg(msg)
+PeriodicMessage::PeriodicMessage(MultithreadedInterface *mti, mavlink_message_t msg, float frequency) : mti(mti), msg(msg)
 {
     interval = (1.0 / frequency) * 1000.0; // in miliseconds
     mti->add_periodic_message(this);
 }
 
-void Periodic_Message::update_message(mavlink_message_t msg1)
+void PeriodicMessage::update_message(mavlink_message_t msg1)
 {
     mtx.lock();
     msg = msg1;
     mtx.unlock();
 }
 
-void Periodic_Message::pause()
+void PeriodicMessage::pause()
 {
     mtx.lock();
 }
 
-void Periodic_Message::resume()
+void PeriodicMessage::resume()
 {
     mtx.unlock();
 }
 
-void Periodic_Message::start_message()
+void PeriodicMessage::start_message()
 {
     running = true;
-    th = thread([=]() {
-        chrono::milliseconds i(interval);
-        while (running)
-        {
-            this_thread::sleep_for(i);
-            mtx.lock();
-            mti->write_message(msg);
-            mtx.unlock();
-        }
-    });
+    th = thread([=]()
+                {
+                    chrono::milliseconds i(interval);
+                    while (running)
+                    {
+                        this_thread::sleep_for(i);
+                        mtx.lock();
+                        mti->write_message(msg);
+                        mtx.unlock();
+                    }
+                });
 }
 
-void Periodic_Message::change_frequency(int frequency)
+void PeriodicMessage::change_frequency(int frequency)
 {
     interval = (1 / frequency) * 1000; // in miliseconds
     stop_message();
     start_message();
 }
 
-void Periodic_Message::stop_message()
+void PeriodicMessage::stop_message()
 {
     running = false;
     th.join();
 }
 
-Mavlink_Message::Mavlink_Message()
+MavlinkMessage::MavlinkMessage()
 {
 }
 
-Mavlink_Message::Mavlink_Message(mavlink_message_t msg) : msg(msg)
+MavlinkMessage::MavlinkMessage(mavlink_message_t msg) : msg(msg)
 {
     update(msg);
 }
 
-void Mavlink_Message::update(mavlink_message_t msg)
+void MavlinkMessage::update(mavlink_message_t msg)
 {
     timestamp = get_curent_time();
     newData = true;

@@ -62,7 +62,8 @@
 #include <pthread.h> // This uses POSIX Threads
 #include <signal.h>
 
-#include <compVisionModule/mavlink.h>
+#include <mavlink.h>
+
 
 // ------------------------------------------------------------------------------
 //   Defines
@@ -91,12 +92,12 @@
  * a serialization interface.  To help with read and write pthreading, it
  * gaurds any port operation with a pthread mutex.
  */
-class Serial_Port
+class SerialPort
 {
 
   public:
-	Serial_Port();
-	Serial_Port(const char *uart_name_, int baudrate_);
+	SerialPort();
+	SerialPort(const char *uart_name_, int baudrate_);
 	void initialize_defaults();
 
 	bool debug;
