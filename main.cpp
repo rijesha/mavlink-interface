@@ -46,7 +46,9 @@ int main()
     SerialPort serial_port("/dev/ttyUSB0", 115200);
     MultithreadedInterface mti(serial_port);
 
-    //UdpDevice udp_device("127.0.0.1", 14550);
+    //UdpDevice udp_device("127.0.0.1", 14560);
+    //to connect to mavproxy do the following
+    //mavproxy.py --master=udpout:127.0.0.1:14560 --out=udpout:127.0.0.1:14561 
     //MultithreadedInterface mti(udp_device);
 
     mti.bind_new_msg_callback(new_msg_callback);
