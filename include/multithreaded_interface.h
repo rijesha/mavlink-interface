@@ -1,25 +1,22 @@
 #pragma once
 
-#include "msg_queue.h"
-#include "serial_port.h"
-#include "udp_device.h"
 #include <mavlink.h>
-#include <map>
-#include <thread>
 #include <chrono>
 #include <ctime>
 #include <functional>
+#include <map>
+#include <thread>
 #include <vector>
+#include "msg_queue.h"
+#include "serial_port.h"
+#include "udp_device.h"
 
 using namespace std;
 
 long int get_curent_time();
 
-class PeriodicMessage;
-
-class MavlinkMessage
-{
-public:
+class MavlinkMessage {
+ public:
   MavlinkMessage();
   MavlinkMessage(mavlink_message_t msg);
   void update(mavlink_message_t msg);
@@ -31,9 +28,8 @@ public:
 
 typedef std::function<void(const mavlink_message_t &msg)> mavlink_msg_callback;
 
-class MultithreadedInterface
-{
-private:
+class MultithreadedInterface {
+ private:
   SerialPort *serial_interface_{};
   UdpDevice *udp_interface_{};
 
@@ -52,7 +48,7 @@ private:
 
   void reader_thread();
 
-public:
+ public:
   MultithreadedInterface(SerialPort &interface);
   MultithreadedInterface(UdpDevice &interface);
 
@@ -60,32 +56,7 @@ public:
 
   void write_message(const mavlink_message_t &message);
 
-  bool add_periodic_message(PeriodicMessage *pm);
   bool running = false;
 
-  vector<PeriodicMessage *> pm_container;
   void bind_new_msg_callback(mavlink_msg_callback);
-};
-
-class PeriodicMessage
-{
-public:
-  PeriodicMessage();
-  PeriodicMessage(MultithreadedInterface *mti, mavlink_message_t msg, float frequency);
-  void start_message();
-  void stop_message();
-  void change_frequency(int frequency);
-  void update_message(mavlink_message_t msg);
-
-  void pause();
-  void resume();
-
-  int interval;
-
-  MultithreadedInterface *mti;
-  mavlink_message_t msg;
-  mutex mtx;
-
-  thread th;
-  bool running = false;
 };
