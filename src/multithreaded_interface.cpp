@@ -79,15 +79,3 @@ void MultithreadedInterface::reader_thread() {
 void MultithreadedInterface::bind_new_msg_callback(mavlink_msg_callback cb) {
   new_msg_callbacks.push_back(cb);
 }
-
-MavlinkMessage::MavlinkMessage() {}
-
-MavlinkMessage::MavlinkMessage(mavlink_message_t msg) : msg(msg) {
-  update(msg);
-}
-
-void MavlinkMessage::update(mavlink_message_t msg) {
-  timestamp = get_curent_time();
-  newData = true;
-  msg = msg;
-}

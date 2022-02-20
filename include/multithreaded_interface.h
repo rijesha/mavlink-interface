@@ -15,17 +15,6 @@ using namespace std;
 
 long int get_curent_time();
 
-class MavlinkMessage {
- public:
-  MavlinkMessage();
-  MavlinkMessage(mavlink_message_t msg);
-  void update(mavlink_message_t msg);
-
-  mavlink_message_t msg;
-  bool newData = false;
-  long int timestamp = 0;
-};
-
 typedef std::function<void(const mavlink_message_t &msg)> mavlink_msg_callback;
 
 class MultithreadedInterface {
@@ -33,7 +22,6 @@ class MultithreadedInterface {
   SerialPort *serial_interface_{};
   UdpDevice *udp_interface_{};
 
-  map<int, mavlink_message_t> last_messages;
   MessageQueue<mavlink_message_t> msg_queue;
 
   vector<mavlink_msg_callback> new_msg_callbacks;
@@ -55,6 +43,7 @@ class MultithreadedInterface {
   void shutdown();
 
   void write_message(const mavlink_message_t &message);
+  map<int, mavlink_message_t> last_messages;  
 
   bool running = false;
 
