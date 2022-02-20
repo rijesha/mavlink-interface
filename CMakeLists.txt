@@ -11,6 +11,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_sources(${PROJECT_NAME}
     PUBLIC
         include/multithreaded_interface.h
+        include/position_control_helper.h
         include/serial_port.h
         include/udp_device.h
     PRIVATE
