@@ -3375,10 +3375,13 @@ static void mavlink_test_control_targets(uint8_t system_id, uint8_t component_id
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_control_targets_t packet_in = {
-        17.0,45.0,73.0,101.0,129.0,157.0,185.0,213.0
+        17.0,45.0,73.0,101.0,129.0,157.0,185.0,213.0,241.0,269.0,297.0
     };
     mavlink_control_targets_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
+        packet1.current_vel_n = packet_in.current_vel_n;
+        packet1.current_vel_e = packet_in.current_vel_e;
+        packet1.current_vel_d = packet_in.current_vel_d;
         packet1.vel_n = packet_in.vel_n;
         packet1.vel_e = packet_in.vel_e;
         packet1.vel_d = packet_in.vel_d;
@@ -3401,12 +3404,12 @@ static void mavlink_test_control_targets(uint8_t system_id, uint8_t component_id
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_control_targets_pack(system_id, component_id, &msg , packet1.vel_n , packet1.vel_e , packet1.vel_d , packet1.acc_n , packet1.acc_e , packet1.acc_d , packet1.roll , packet1.pitch );
+    mavlink_msg_control_targets_pack(system_id, component_id, &msg , packet1.current_vel_n , packet1.current_vel_e , packet1.current_vel_d , packet1.vel_n , packet1.vel_e , packet1.vel_d , packet1.acc_n , packet1.acc_e , packet1.acc_d , packet1.roll , packet1.pitch );
     mavlink_msg_control_targets_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_control_targets_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.vel_n , packet1.vel_e , packet1.vel_d , packet1.acc_n , packet1.acc_e , packet1.acc_d , packet1.roll , packet1.pitch );
+    mavlink_msg_control_targets_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.current_vel_n , packet1.current_vel_e , packet1.current_vel_d , packet1.vel_n , packet1.vel_e , packet1.vel_d , packet1.acc_n , packet1.acc_e , packet1.acc_d , packet1.roll , packet1.pitch );
     mavlink_msg_control_targets_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -3419,7 +3422,7 @@ static void mavlink_test_control_targets(uint8_t system_id, uint8_t component_id
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_control_targets_send(MAVLINK_COMM_1 , packet1.vel_n , packet1.vel_e , packet1.vel_d , packet1.acc_n , packet1.acc_e , packet1.acc_d , packet1.roll , packet1.pitch );
+    mavlink_msg_control_targets_send(MAVLINK_COMM_1 , packet1.current_vel_n , packet1.current_vel_e , packet1.current_vel_d , packet1.vel_n , packet1.vel_e , packet1.vel_d , packet1.acc_n , packet1.acc_e , packet1.acc_d , packet1.roll , packet1.pitch );
     mavlink_msg_control_targets_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 

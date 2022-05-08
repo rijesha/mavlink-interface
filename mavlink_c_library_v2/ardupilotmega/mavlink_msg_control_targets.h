@@ -5,6 +5,9 @@
 
 
 typedef struct __mavlink_control_targets_t {
+ float current_vel_n; /*<  vel_n */
+ float current_vel_e; /*<  vel_e */
+ float current_vel_d; /*<  vel_d */
  float vel_n; /*<  vel_n */
  float vel_e; /*<  vel_e */
  float vel_d; /*<  vel_d */
@@ -15,13 +18,13 @@ typedef struct __mavlink_control_targets_t {
  float pitch; /*<  pitch in degrees*/
 } mavlink_control_targets_t;
 
-#define MAVLINK_MSG_ID_CONTROL_TARGETS_LEN 32
-#define MAVLINK_MSG_ID_CONTROL_TARGETS_MIN_LEN 32
-#define MAVLINK_MSG_ID_406_LEN 32
-#define MAVLINK_MSG_ID_406_MIN_LEN 32
+#define MAVLINK_MSG_ID_CONTROL_TARGETS_LEN 44
+#define MAVLINK_MSG_ID_CONTROL_TARGETS_MIN_LEN 44
+#define MAVLINK_MSG_ID_406_LEN 44
+#define MAVLINK_MSG_ID_406_MIN_LEN 44
 
-#define MAVLINK_MSG_ID_CONTROL_TARGETS_CRC 176
-#define MAVLINK_MSG_ID_406_CRC 176
+#define MAVLINK_MSG_ID_CONTROL_TARGETS_CRC 133
+#define MAVLINK_MSG_ID_406_CRC 133
 
 
 
@@ -29,29 +32,35 @@ typedef struct __mavlink_control_targets_t {
 #define MAVLINK_MESSAGE_INFO_CONTROL_TARGETS { \
     406, \
     "CONTROL_TARGETS", \
-    8, \
-    {  { "vel_n", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_control_targets_t, vel_n) }, \
-         { "vel_e", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_control_targets_t, vel_e) }, \
-         { "vel_d", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_control_targets_t, vel_d) }, \
-         { "acc_n", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_control_targets_t, acc_n) }, \
-         { "acc_e", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_control_targets_t, acc_e) }, \
-         { "acc_d", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_control_targets_t, acc_d) }, \
-         { "roll", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_control_targets_t, roll) }, \
-         { "pitch", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_control_targets_t, pitch) }, \
+    11, \
+    {  { "current_vel_n", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_control_targets_t, current_vel_n) }, \
+         { "current_vel_e", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_control_targets_t, current_vel_e) }, \
+         { "current_vel_d", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_control_targets_t, current_vel_d) }, \
+         { "vel_n", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_control_targets_t, vel_n) }, \
+         { "vel_e", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_control_targets_t, vel_e) }, \
+         { "vel_d", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_control_targets_t, vel_d) }, \
+         { "acc_n", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_control_targets_t, acc_n) }, \
+         { "acc_e", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_control_targets_t, acc_e) }, \
+         { "acc_d", NULL, MAVLINK_TYPE_FLOAT, 0, 32, offsetof(mavlink_control_targets_t, acc_d) }, \
+         { "roll", NULL, MAVLINK_TYPE_FLOAT, 0, 36, offsetof(mavlink_control_targets_t, roll) }, \
+         { "pitch", NULL, MAVLINK_TYPE_FLOAT, 0, 40, offsetof(mavlink_control_targets_t, pitch) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_CONTROL_TARGETS { \
     "CONTROL_TARGETS", \
-    8, \
-    {  { "vel_n", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_control_targets_t, vel_n) }, \
-         { "vel_e", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_control_targets_t, vel_e) }, \
-         { "vel_d", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_control_targets_t, vel_d) }, \
-         { "acc_n", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_control_targets_t, acc_n) }, \
-         { "acc_e", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_control_targets_t, acc_e) }, \
-         { "acc_d", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_control_targets_t, acc_d) }, \
-         { "roll", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_control_targets_t, roll) }, \
-         { "pitch", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_control_targets_t, pitch) }, \
+    11, \
+    {  { "current_vel_n", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_control_targets_t, current_vel_n) }, \
+         { "current_vel_e", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_control_targets_t, current_vel_e) }, \
+         { "current_vel_d", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_control_targets_t, current_vel_d) }, \
+         { "vel_n", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_control_targets_t, vel_n) }, \
+         { "vel_e", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_control_targets_t, vel_e) }, \
+         { "vel_d", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_control_targets_t, vel_d) }, \
+         { "acc_n", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_control_targets_t, acc_n) }, \
+         { "acc_e", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_control_targets_t, acc_e) }, \
+         { "acc_d", NULL, MAVLINK_TYPE_FLOAT, 0, 32, offsetof(mavlink_control_targets_t, acc_d) }, \
+         { "roll", NULL, MAVLINK_TYPE_FLOAT, 0, 36, offsetof(mavlink_control_targets_t, roll) }, \
+         { "pitch", NULL, MAVLINK_TYPE_FLOAT, 0, 40, offsetof(mavlink_control_targets_t, pitch) }, \
          } \
 }
 #endif
@@ -62,6 +71,9 @@ typedef struct __mavlink_control_targets_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
+ * @param current_vel_n  vel_n 
+ * @param current_vel_e  vel_e 
+ * @param current_vel_d  vel_d 
  * @param vel_n  vel_n 
  * @param vel_e  vel_e 
  * @param vel_d  vel_d 
@@ -73,22 +85,28 @@ typedef struct __mavlink_control_targets_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_control_targets_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               float vel_n, float vel_e, float vel_d, float acc_n, float acc_e, float acc_d, float roll, float pitch)
+                               float current_vel_n, float current_vel_e, float current_vel_d, float vel_n, float vel_e, float vel_d, float acc_n, float acc_e, float acc_d, float roll, float pitch)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CONTROL_TARGETS_LEN];
-    _mav_put_float(buf, 0, vel_n);
-    _mav_put_float(buf, 4, vel_e);
-    _mav_put_float(buf, 8, vel_d);
-    _mav_put_float(buf, 12, acc_n);
-    _mav_put_float(buf, 16, acc_e);
-    _mav_put_float(buf, 20, acc_d);
-    _mav_put_float(buf, 24, roll);
-    _mav_put_float(buf, 28, pitch);
+    _mav_put_float(buf, 0, current_vel_n);
+    _mav_put_float(buf, 4, current_vel_e);
+    _mav_put_float(buf, 8, current_vel_d);
+    _mav_put_float(buf, 12, vel_n);
+    _mav_put_float(buf, 16, vel_e);
+    _mav_put_float(buf, 20, vel_d);
+    _mav_put_float(buf, 24, acc_n);
+    _mav_put_float(buf, 28, acc_e);
+    _mav_put_float(buf, 32, acc_d);
+    _mav_put_float(buf, 36, roll);
+    _mav_put_float(buf, 40, pitch);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CONTROL_TARGETS_LEN);
 #else
     mavlink_control_targets_t packet;
+    packet.current_vel_n = current_vel_n;
+    packet.current_vel_e = current_vel_e;
+    packet.current_vel_d = current_vel_d;
     packet.vel_n = vel_n;
     packet.vel_e = vel_e;
     packet.vel_d = vel_d;
@@ -111,6 +129,9 @@ static inline uint16_t mavlink_msg_control_targets_pack(uint8_t system_id, uint8
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
+ * @param current_vel_n  vel_n 
+ * @param current_vel_e  vel_e 
+ * @param current_vel_d  vel_d 
  * @param vel_n  vel_n 
  * @param vel_e  vel_e 
  * @param vel_d  vel_d 
@@ -123,22 +144,28 @@ static inline uint16_t mavlink_msg_control_targets_pack(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_control_targets_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   float vel_n,float vel_e,float vel_d,float acc_n,float acc_e,float acc_d,float roll,float pitch)
+                                   float current_vel_n,float current_vel_e,float current_vel_d,float vel_n,float vel_e,float vel_d,float acc_n,float acc_e,float acc_d,float roll,float pitch)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CONTROL_TARGETS_LEN];
-    _mav_put_float(buf, 0, vel_n);
-    _mav_put_float(buf, 4, vel_e);
-    _mav_put_float(buf, 8, vel_d);
-    _mav_put_float(buf, 12, acc_n);
-    _mav_put_float(buf, 16, acc_e);
-    _mav_put_float(buf, 20, acc_d);
-    _mav_put_float(buf, 24, roll);
-    _mav_put_float(buf, 28, pitch);
+    _mav_put_float(buf, 0, current_vel_n);
+    _mav_put_float(buf, 4, current_vel_e);
+    _mav_put_float(buf, 8, current_vel_d);
+    _mav_put_float(buf, 12, vel_n);
+    _mav_put_float(buf, 16, vel_e);
+    _mav_put_float(buf, 20, vel_d);
+    _mav_put_float(buf, 24, acc_n);
+    _mav_put_float(buf, 28, acc_e);
+    _mav_put_float(buf, 32, acc_d);
+    _mav_put_float(buf, 36, roll);
+    _mav_put_float(buf, 40, pitch);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CONTROL_TARGETS_LEN);
 #else
     mavlink_control_targets_t packet;
+    packet.current_vel_n = current_vel_n;
+    packet.current_vel_e = current_vel_e;
+    packet.current_vel_d = current_vel_d;
     packet.vel_n = vel_n;
     packet.vel_e = vel_e;
     packet.vel_d = vel_d;
@@ -165,7 +192,7 @@ static inline uint16_t mavlink_msg_control_targets_pack_chan(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_control_targets_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_control_targets_t* control_targets)
 {
-    return mavlink_msg_control_targets_pack(system_id, component_id, msg, control_targets->vel_n, control_targets->vel_e, control_targets->vel_d, control_targets->acc_n, control_targets->acc_e, control_targets->acc_d, control_targets->roll, control_targets->pitch);
+    return mavlink_msg_control_targets_pack(system_id, component_id, msg, control_targets->current_vel_n, control_targets->current_vel_e, control_targets->current_vel_d, control_targets->vel_n, control_targets->vel_e, control_targets->vel_d, control_targets->acc_n, control_targets->acc_e, control_targets->acc_d, control_targets->roll, control_targets->pitch);
 }
 
 /**
@@ -179,13 +206,16 @@ static inline uint16_t mavlink_msg_control_targets_encode(uint8_t system_id, uin
  */
 static inline uint16_t mavlink_msg_control_targets_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_control_targets_t* control_targets)
 {
-    return mavlink_msg_control_targets_pack_chan(system_id, component_id, chan, msg, control_targets->vel_n, control_targets->vel_e, control_targets->vel_d, control_targets->acc_n, control_targets->acc_e, control_targets->acc_d, control_targets->roll, control_targets->pitch);
+    return mavlink_msg_control_targets_pack_chan(system_id, component_id, chan, msg, control_targets->current_vel_n, control_targets->current_vel_e, control_targets->current_vel_d, control_targets->vel_n, control_targets->vel_e, control_targets->vel_d, control_targets->acc_n, control_targets->acc_e, control_targets->acc_d, control_targets->roll, control_targets->pitch);
 }
 
 /**
  * @brief Send a control_targets message
  * @param chan MAVLink channel to send the message
  *
+ * @param current_vel_n  vel_n 
+ * @param current_vel_e  vel_e 
+ * @param current_vel_d  vel_d 
  * @param vel_n  vel_n 
  * @param vel_e  vel_e 
  * @param vel_d  vel_d 
@@ -197,22 +227,28 @@ static inline uint16_t mavlink_msg_control_targets_encode_chan(uint8_t system_id
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_control_targets_send(mavlink_channel_t chan, float vel_n, float vel_e, float vel_d, float acc_n, float acc_e, float acc_d, float roll, float pitch)
+static inline void mavlink_msg_control_targets_send(mavlink_channel_t chan, float current_vel_n, float current_vel_e, float current_vel_d, float vel_n, float vel_e, float vel_d, float acc_n, float acc_e, float acc_d, float roll, float pitch)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CONTROL_TARGETS_LEN];
-    _mav_put_float(buf, 0, vel_n);
-    _mav_put_float(buf, 4, vel_e);
-    _mav_put_float(buf, 8, vel_d);
-    _mav_put_float(buf, 12, acc_n);
-    _mav_put_float(buf, 16, acc_e);
-    _mav_put_float(buf, 20, acc_d);
-    _mav_put_float(buf, 24, roll);
-    _mav_put_float(buf, 28, pitch);
+    _mav_put_float(buf, 0, current_vel_n);
+    _mav_put_float(buf, 4, current_vel_e);
+    _mav_put_float(buf, 8, current_vel_d);
+    _mav_put_float(buf, 12, vel_n);
+    _mav_put_float(buf, 16, vel_e);
+    _mav_put_float(buf, 20, vel_d);
+    _mav_put_float(buf, 24, acc_n);
+    _mav_put_float(buf, 28, acc_e);
+    _mav_put_float(buf, 32, acc_d);
+    _mav_put_float(buf, 36, roll);
+    _mav_put_float(buf, 40, pitch);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CONTROL_TARGETS, buf, MAVLINK_MSG_ID_CONTROL_TARGETS_MIN_LEN, MAVLINK_MSG_ID_CONTROL_TARGETS_LEN, MAVLINK_MSG_ID_CONTROL_TARGETS_CRC);
 #else
     mavlink_control_targets_t packet;
+    packet.current_vel_n = current_vel_n;
+    packet.current_vel_e = current_vel_e;
+    packet.current_vel_d = current_vel_d;
     packet.vel_n = vel_n;
     packet.vel_e = vel_e;
     packet.vel_d = vel_d;
@@ -234,7 +270,7 @@ static inline void mavlink_msg_control_targets_send(mavlink_channel_t chan, floa
 static inline void mavlink_msg_control_targets_send_struct(mavlink_channel_t chan, const mavlink_control_targets_t* control_targets)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_control_targets_send(chan, control_targets->vel_n, control_targets->vel_e, control_targets->vel_d, control_targets->acc_n, control_targets->acc_e, control_targets->acc_d, control_targets->roll, control_targets->pitch);
+    mavlink_msg_control_targets_send(chan, control_targets->current_vel_n, control_targets->current_vel_e, control_targets->current_vel_d, control_targets->vel_n, control_targets->vel_e, control_targets->vel_d, control_targets->acc_n, control_targets->acc_e, control_targets->acc_d, control_targets->roll, control_targets->pitch);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CONTROL_TARGETS, (const char *)control_targets, MAVLINK_MSG_ID_CONTROL_TARGETS_MIN_LEN, MAVLINK_MSG_ID_CONTROL_TARGETS_LEN, MAVLINK_MSG_ID_CONTROL_TARGETS_CRC);
 #endif
@@ -248,22 +284,28 @@ static inline void mavlink_msg_control_targets_send_struct(mavlink_channel_t cha
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_control_targets_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float vel_n, float vel_e, float vel_d, float acc_n, float acc_e, float acc_d, float roll, float pitch)
+static inline void mavlink_msg_control_targets_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float current_vel_n, float current_vel_e, float current_vel_d, float vel_n, float vel_e, float vel_d, float acc_n, float acc_e, float acc_d, float roll, float pitch)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_float(buf, 0, vel_n);
-    _mav_put_float(buf, 4, vel_e);
-    _mav_put_float(buf, 8, vel_d);
-    _mav_put_float(buf, 12, acc_n);
-    _mav_put_float(buf, 16, acc_e);
-    _mav_put_float(buf, 20, acc_d);
-    _mav_put_float(buf, 24, roll);
-    _mav_put_float(buf, 28, pitch);
+    _mav_put_float(buf, 0, current_vel_n);
+    _mav_put_float(buf, 4, current_vel_e);
+    _mav_put_float(buf, 8, current_vel_d);
+    _mav_put_float(buf, 12, vel_n);
+    _mav_put_float(buf, 16, vel_e);
+    _mav_put_float(buf, 20, vel_d);
+    _mav_put_float(buf, 24, acc_n);
+    _mav_put_float(buf, 28, acc_e);
+    _mav_put_float(buf, 32, acc_d);
+    _mav_put_float(buf, 36, roll);
+    _mav_put_float(buf, 40, pitch);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CONTROL_TARGETS, buf, MAVLINK_MSG_ID_CONTROL_TARGETS_MIN_LEN, MAVLINK_MSG_ID_CONTROL_TARGETS_LEN, MAVLINK_MSG_ID_CONTROL_TARGETS_CRC);
 #else
     mavlink_control_targets_t *packet = (mavlink_control_targets_t *)msgbuf;
+    packet->current_vel_n = current_vel_n;
+    packet->current_vel_e = current_vel_e;
+    packet->current_vel_d = current_vel_d;
     packet->vel_n = vel_n;
     packet->vel_e = vel_e;
     packet->vel_d = vel_d;
@@ -284,13 +326,43 @@ static inline void mavlink_msg_control_targets_send_buf(mavlink_message_t *msgbu
 
 
 /**
+ * @brief Get field current_vel_n from control_targets message
+ *
+ * @return  vel_n 
+ */
+static inline float mavlink_msg_control_targets_get_current_vel_n(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  0);
+}
+
+/**
+ * @brief Get field current_vel_e from control_targets message
+ *
+ * @return  vel_e 
+ */
+static inline float mavlink_msg_control_targets_get_current_vel_e(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  4);
+}
+
+/**
+ * @brief Get field current_vel_d from control_targets message
+ *
+ * @return  vel_d 
+ */
+static inline float mavlink_msg_control_targets_get_current_vel_d(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  8);
+}
+
+/**
  * @brief Get field vel_n from control_targets message
  *
  * @return  vel_n 
  */
 static inline float mavlink_msg_control_targets_get_vel_n(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  0);
+    return _MAV_RETURN_float(msg,  12);
 }
 
 /**
@@ -300,7 +372,7 @@ static inline float mavlink_msg_control_targets_get_vel_n(const mavlink_message_
  */
 static inline float mavlink_msg_control_targets_get_vel_e(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  4);
+    return _MAV_RETURN_float(msg,  16);
 }
 
 /**
@@ -310,7 +382,7 @@ static inline float mavlink_msg_control_targets_get_vel_e(const mavlink_message_
  */
 static inline float mavlink_msg_control_targets_get_vel_d(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  8);
+    return _MAV_RETURN_float(msg,  20);
 }
 
 /**
@@ -320,7 +392,7 @@ static inline float mavlink_msg_control_targets_get_vel_d(const mavlink_message_
  */
 static inline float mavlink_msg_control_targets_get_acc_n(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  12);
+    return _MAV_RETURN_float(msg,  24);
 }
 
 /**
@@ -330,7 +402,7 @@ static inline float mavlink_msg_control_targets_get_acc_n(const mavlink_message_
  */
 static inline float mavlink_msg_control_targets_get_acc_e(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  16);
+    return _MAV_RETURN_float(msg,  28);
 }
 
 /**
@@ -340,7 +412,7 @@ static inline float mavlink_msg_control_targets_get_acc_e(const mavlink_message_
  */
 static inline float mavlink_msg_control_targets_get_acc_d(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  20);
+    return _MAV_RETURN_float(msg,  32);
 }
 
 /**
@@ -350,7 +422,7 @@ static inline float mavlink_msg_control_targets_get_acc_d(const mavlink_message_
  */
 static inline float mavlink_msg_control_targets_get_roll(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  24);
+    return _MAV_RETURN_float(msg,  36);
 }
 
 /**
@@ -360,7 +432,7 @@ static inline float mavlink_msg_control_targets_get_roll(const mavlink_message_t
  */
 static inline float mavlink_msg_control_targets_get_pitch(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  28);
+    return _MAV_RETURN_float(msg,  40);
 }
 
 /**
@@ -372,6 +444,9 @@ static inline float mavlink_msg_control_targets_get_pitch(const mavlink_message_
 static inline void mavlink_msg_control_targets_decode(const mavlink_message_t* msg, mavlink_control_targets_t* control_targets)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    control_targets->current_vel_n = mavlink_msg_control_targets_get_current_vel_n(msg);
+    control_targets->current_vel_e = mavlink_msg_control_targets_get_current_vel_e(msg);
+    control_targets->current_vel_d = mavlink_msg_control_targets_get_current_vel_d(msg);
     control_targets->vel_n = mavlink_msg_control_targets_get_vel_n(msg);
     control_targets->vel_e = mavlink_msg_control_targets_get_vel_e(msg);
     control_targets->vel_d = mavlink_msg_control_targets_get_vel_d(msg);
