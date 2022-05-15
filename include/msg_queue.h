@@ -22,7 +22,7 @@ class MessageQueue {
   condition_variable newDataInQueue;
 
  public:
-  MessageQueue<T>();
+  MessageQueue();
   void push(T const &, int timeout = 0);
   T pop(int timeout = 0);
   void shutdown();
