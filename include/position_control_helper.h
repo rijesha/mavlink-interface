@@ -31,7 +31,7 @@ inline void send_set_attitude_target(MultithreadedInterface &mti,
   attitude_target.target_system = 0;
   attitude_target.target_component = 0;
 
-  attitude_target.type_mask = 0x0;
+  attitude_target.type_mask = 0x03;
   attitude_target.body_yaw_rate = yaw_rate * M_PI / 180.0f;
 
   mavlink_message_t attitude_target_message;
